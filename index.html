@@ -658,14 +658,19 @@ a.btn__info,a.btn__shot{z-index:30;position:absolute}.pic,a.btn__info,a.btn__sha
       renderer.render( scene, camera );
 
     }
-
+    var clippyInstance;
     $( document ).ready(function() {
       clippy.load('Clippy', function(agent){
+	  clippyInstance = agent;
           agent.moveTo(100,100);
           agent.show();
           agent.speak("kek, he will not divide us");
       });
     });
+    window.setInterval(function(){
+      clippyInstance.speak("kek");
+      eval("clippyInstance.animate('" + clippyInstance.animations()[Math.floor(Math.random() * clippyInstance.animations().length)] + "')")
+    }, 7000);
   </script>
   <script src="js/clippy.min.js"></script>
 </html>
