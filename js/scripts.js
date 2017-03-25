@@ -304,7 +304,6 @@ function makeClippy(type) {
   });
 }
 $(document).ready(function() {
-  $('body').css('overflow', 'hidden');
   var shadilaySong = new Audio('sound/shadilay.m4a');
   setTimeout(function() { scene.remove(scene.children[3]); }, 3000);
   setTimeout(function() { loadFlag('textures/terrain/flag.png'); shadilaySong.play(); }, 6000);
