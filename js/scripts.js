@@ -306,15 +306,17 @@ function makeClippy(type) {
 $(document).ready(function() {
   $('body').css('overflow', 'hidden');
   var shadilaySong = new Audio('sound/shadilay.m4a');
-  shadilaySong.play();
-  makeClippy('Clippy');
-  makeClippy('Merlin');
-  makeClippy('Rover');
-  makeClippy('Links');
+  setTimeout(function() { scene.remove(scene.children[3]); }, 3000);
+  setTimeout(function() { loadFlag('textures/terrain/flag.png'); shadilaySong.play(); }, 6000);
+  setTimeout(function() { makeClippy('Clippy'); }, 7000);
+  setTimeout(function() { makeClippy('Merlin'); }, 12000);
+  setTimeout(function() { makeClippy('Rover'); }, 17000);
+  setTimeout(function() { makeClippy('Links'); }, 23000);
 });
 window.setInterval(function(){
+  for (i = 0; i < clippys.length; i++) {
   eval("clippys["+ i +"].animate('" + clippys[i].animations()[Math.floor(Math.random() * clippys[i].animations().length)] + "')")
-}, 7000);
+  }}, 7000);
 window.setInterval(function(){
   for (i = 0; i < clippys.length; i++) {
     var randX = Math.floor(Math.random() * $(document).width());
@@ -324,4 +326,4 @@ window.setInterval(function(){
     clippys[i].speak(clippySayings[randSaying]);
     clippys[i].speak("kek");
   }
-}, 2000);
+}, 8000);

@@ -15,6 +15,9 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="css/clippy.css">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+  a.btn__info,a.btn__shot{z-index:30;position:absolute}.pic,a.btn__info,a.btn__share,a.btn__shot{position:absolute}*{margin:0;padding:0}body,html{ove    rflow:hidden}body{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;text-size-adjust:100%;-moz-osx-font-smoothing:antialiased;-webkit-font-sm    oothing:antialiased;text-rendering:geometricPrecision;font-size:14px;line-height:1.5em;font-family:"Roboto Mono";color:#333}body.open--box .overlay    {display:table}h2{padding:0 0 10px;font-size:1.6em;text-transform:uppercase;font-family:Helvetica,Arial,sans-serif}h3{font-size:.8em}a.btn__info{ri    ght:10px;top:10px;padding:10px;line-height:1;text-align:center;color:#4169e1;background:#fff}a.btn__shot{right:12px;top:60px;font-size:1.6em;color:    #f2f2f2}a.btn__info:hover{color:#4169e1;background:#ff0}a.btn__share:hover,a.btn__shot:hover{color:#ff0}a.btn__share{bottom:20px;right:20px;color:#    f2f2f2}.pic{z-index:5;top:20px;left:20px}.pic img{margin:5px;background:#333;padding:5px;position:relative}.overlay{width:100%;height:100%;position    :absolute;z-index:20;text-align:center;display:none}.overlay img{margin:10px auto 0;max-height:20px}p{padding:5px 0}a{color:#4169e1;text-decoration    :none}.colophon a{border-bottom:2px solid #4169e1}small a{color:#333}.overlay .content{height:100%;padding:20px;display:table-cell;vertical-align:m    iddle}.overlay .content .intro{margin:0 auto;max-width:450px;padding:20px;background:rgba(255,255,255,.6)}#youtube{position: fixed;bottom:50px;righ    t:50px;}
+  </style>
   <!--<script src="js/zepto.min.js"></script>-->
   <script
   src="https://code.jquery.com/jquery-2.2.4.min.js"
@@ -151,44 +154,6 @@
     init();
     animate();
 
-    function loadFlag(flag) {
-      var loader = new THREE.TextureLoader();
-      var clothTexture = loader.load( flag );
-      clothTexture.wrapS = clothTexture.wrapT = THREE.RepeatWrapping;
-      clothTexture.anisotropy = 16;
-      clothTexture.minFilter = THREE.LinearFilter;
-
-      var clothMaterial = new THREE.MeshPhongMaterial( {
-        specular: 0x030303,
-        map: clothTexture,
-        side: THREE.DoubleSide,
-        alphaTest: 0.5
-      });
-
-      // cloth geometry
-      clothGeometry = new THREE.ParametricGeometry( clothFunction, cloth.w, cloth.h, true );
-      clothGeometry.dynamic = true;
-
-      var uniforms = { texture:  { value: clothTexture } };
-      var vertexShader = document.getElementById( 'vertexShaderDepth' ).textContent;
-      var fragmentShader = document.getElementById( 'fragmentShaderDepth' ).textContent;
-
-      // cloth mesh
-      object = new THREE.Mesh( clothGeometry, clothMaterial );
-   //   object.position.set(0, 350, 0 );
-      object.position.set(-25, 350, 0 );
-      object.rotation.set(0,0,Math.PI * 90 / 180);
-      object.castShadow = true;
-      scene.add( object );
-
-      object.customDepthMaterial = new THREE.ShaderMaterial( {
-        uniforms: uniforms,
-        vertexShader: vertexShader,
-        fragmentShader: fragmentShader,
-        side: THREE.DoubleSide
-      } );
-    }
-
     function init() {
 
       container = document.createElement( 'div' );
@@ -237,13 +202,47 @@
       scene.add( light );
 
       // cloth material
-      loadFlag('textures/terrain/oldFlag.png');
+
+      var loader = new THREE.TextureLoader();
+      var clothTexture = loader.load( 'textures/terrain/flag.png' );
+      clothTexture.wrapS = clothTexture.wrapT = THREE.RepeatWrapping;
+      clothTexture.anisotropy = 16;
+      clothTexture.minFilter = THREE.LinearFilter;
+
+      var clothMaterial = new THREE.MeshPhongMaterial( {
+        specular: 0x030303,
+        map: clothTexture,
+        side: THREE.DoubleSide,
+        alphaTest: 0.5
+      });
+
+      // cloth geometry
+      clothGeometry = new THREE.ParametricGeometry( clothFunction, cloth.w, cloth.h, true );
+      clothGeometry.dynamic = true;
+
+      var uniforms = { texture:  { value: clothTexture } };
+      var vertexShader = document.getElementById( 'vertexShaderDepth' ).textContent;
+      var fragmentShader = document.getElementById( 'fragmentShaderDepth' ).textContent;
+
+      // cloth mesh
+      object = new THREE.Mesh( clothGeometry, clothMaterial );
+   //   object.position.set(0, 350, 0 );
+      object.position.set(-25, 350, 0 );
+      object.rotation.set(0,0,Math.PI * 90 / 180);
+      object.castShadow = true;
+      scene.add( object );
+
+      object.customDepthMaterial = new THREE.ShaderMaterial( {
+        uniforms: uniforms,
+        vertexShader: vertexShader,
+        fragmentShader: fragmentShader,
+        side: THREE.DoubleSide
+      } );
 
       // sky
       initSky();
 
       // ground
-      var loader = new THREE.TextureLoader();
       var groundTexture = loader.load( 'textures/terrain/sand.jpg' );
       groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
       groundTexture.repeat.set( 25, 25 );
