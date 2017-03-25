@@ -303,7 +303,8 @@ function makeClippy(type) {
     agent.speak(clippySayings[randSaying]);
   });
 }
-$( document ).ready(function() {
+$(document).ready(function() {
+  $('body').css('overflow', 'hidden');
   var shadilaySong = new Audio('sound/shadilay.m4a');
   shadilaySong.play();
   makeClippy('Clippy');
