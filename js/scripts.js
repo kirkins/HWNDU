@@ -2,34 +2,27 @@ var DAMPING = 0.03;
 var DRAG = 1 - DAMPING;
 var MASS = 0.1;
 var restDistance = 17;
-
 var xSegs = 10;
 var ySegs = 12;
-
 var clothFunction = plane( restDistance * xSegs, restDistance * ySegs );
-
 var cloth = new Cloth( xSegs, ySegs );
-
 var GRAVITY = 981 * 1.4;
 //  var gravity = new THREE.Vector3( 0, - GRAVITY, 0 ).multiplyScalar( MASS );
 var gravity = new THREE.Vector3( - GRAVITY, 0, 0 ).multiplyScalar( MASS );
-
-
 var TIMESTEP = 18 / 1000;
 var TIMESTEP_SQ = TIMESTEP * TIMESTEP;
-
 var pins = [];
-
-
 var wind = true;
 // var windStrength = 2;
 var windStrength = 2000;
 var windForce = new THREE.Vector3( 0, 0, 0 );
-
 var tmpForce = new THREE.Vector3();
-
 var lastTime;
-
+var shadilaySong = new Audio('sound/shadilay.m4a');
+var justDoIt = new Audio('sound/justDoIt.mp3');
+shadilaySong.playbackRate = 0.5;
+var musicSpeed = 1;
+var zoomingOut = true;
 
 function plane( width, height ) {
 
@@ -290,6 +283,9 @@ function simulate( time ) {
 
 }
 
+shadilaySong.onended = function() { musicSpeed = 1; shadilaySong.playbackRate = 0.4; shadilaySong.play(); }
+justDoIt.onended = function() { justDoIt.playbackRate = 0.5; justDoIt.play(); }
+
 var clippys = [];
 var clippySayings = ['kek he will not divide us', 'kek', 'shia labeouf BTFO', 'lolz', 'MAGA', 'winning', 'capture the flag', 'praise kek'];
 function makeClippy(type) {
@@ -304,7 +300,7 @@ function makeClippy(type) {
   });
 }
 $(document).ready(function() {
-  var shadilaySong = new Audio('sound/shadilay.m4a');
+  justDoIt.play();
   setTimeout(function() { scene.remove(scene.children[3]); }, 3000);
   setTimeout(function() { loadFlag('textures/terrain/flag.png'); shadilaySong.play(); }, 6000);
   setTimeout(function() { makeClippy('Clippy'); }, 7000);
@@ -313,9 +309,25 @@ $(document).ready(function() {
   setTimeout(function() { makeClippy('Links'); }, 23000);
 });
 window.setInterval(function(){
+  if(zoomingOut) {
+    if(camera.position.x>4500) zoomingOut = false;
+    camera.position.x = camera.position.x + musicSpeed;
+    camera.position.z = camera.position.z - musicSpeed;
+    camera.position.y = camera.position.y + musicSpeed;
+  } else {
+    if(camera.position.x<500) zoomingOut = true;
+    camera.position.x = camera.position.x - musicSpeed;
+    camera.position.z = camera.position.z + musicSpeed;
+    camera.position.y = camera.position.y - musicSpeed;
+  }
+}, 10);
+window.setInterval(function(){
+  if(zoomingOut) shadilaySong.playbackRate = shadilaySong.playbackRate + 0.1;
+  else shadilaySong.playbackrate = shadilaySong.playbackRate - 0.1;
+  musicSpeed++;
   for (i = 0; i < clippys.length; i++) {
   eval("clippys["+ i +"].animate('" + clippys[i].animations()[Math.floor(Math.random() * clippys[i].animations().length)] + "')")
-  }}, 7000);
+}}, 7000);
 window.setInterval(function(){
   for (i = 0; i < clippys.length; i++) {
     var randX = Math.floor(Math.random() * $(document).width());
